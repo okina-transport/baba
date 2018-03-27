@@ -19,6 +19,11 @@
     <if condition='property("env").contains("dev")'>
     <then>
         <include resource="org/springframework/boot/logging/logback/base.xml" />
+
+        <logger name="org.glassfish.jersey.server.wadl.internal.generators.WadlGeneratorJAXBGrammarGenerator" level="INFO"/>
+        <logger name="org.springframework.core.env.PropertySourcesPropertyResolver" level="INFO"/>
+
+
     </then>
     <else>
         <appender name="console" class="ch.qos.logback.core.ConsoleAppender">

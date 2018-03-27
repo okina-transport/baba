@@ -53,7 +53,7 @@ public class NewUserEmailFormatterTest {
 
     @Test
     public void testGetNewUserEmailSubject() {
-        Assert.assertEquals("Entur - New account details", emailFormatter.getSubject(Locale.ENGLISH));
+        Assert.assertEquals("Référential Multimodal Régional - Création de compte", emailFormatter.getSubject(Locale.FRENCH));
     }
 
 }
