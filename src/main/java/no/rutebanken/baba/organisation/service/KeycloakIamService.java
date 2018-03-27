@@ -114,7 +114,6 @@ public class KeycloakIamService implements IamService {
 
     public String createUser(User user) {
         String password = generatePassword();
-        ;
         if (!enabled) {
             logger.info("Keycloak disabled! Ignored createUser: " + user.getUsername());
             return password;

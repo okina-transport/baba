@@ -46,12 +46,11 @@
         <spring-boot.version>1.5.6.RELEASE</spring-boot.version>
         <spring.security.version>4.2.3.RELEASE</spring.security.version>
         <postgresql.version>9.4-1201-jdbc41</postgresql.version>
-        <keycloak.version>3.2.1.Final</keycloak.version>
+        <keycloak.version>3.4.1.Final</keycloak.version>
 
         <!-- Docker & Fabric8 Configs -->
-        <docker.from>eu.gcr.io/carbon-1287/java-base-image</docker.from>
-        <fabric8.dockerUser>carbon-1287/</fabric8.dockerUser>
-        <docker.image>eu.gcr.io/${fabric8.dockerUser}${project.artifactId}:${project.version}</docker.image>
+        <docker.from>registry.okina.fr/na/java-base-image</docker.from>
+        <docker.image>registry.okina.fr/na/${project.artifactId}:${project.version}</docker.image>
         <docker.cleanup>none</docker.cleanup>
         <hazelcast-hibernate5.version>1.2.2</hazelcast-hibernate5.version>
         <fabric8.service.name>springboot-webmvc</fabric8.service.name>
