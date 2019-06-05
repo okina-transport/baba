@@ -693,7 +693,6 @@ ALTER TABLE ONLY responsibility_role_assignment
     ADD CONSTRAINT rsp_role_assignment_unique_id UNIQUE (code_space_pk, private_code, entity_version);
 
 
-
 --
 -- Name: uk_7ghge2jt2h0cgdv60ucgppy89; Type: CONSTRAINT; Schema: public; Owner: baba
 --

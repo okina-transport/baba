@@ -1,4 +1,4 @@
-# baba
+# baba [![CircleCI](https://circleci.com/gh/entur/baba/tree/master.svg?style=svg)](https://circleci.com/gh/entur/baba/tree/master)
 Organization register for ninkasi users
 
 ## Liveness and readyiness
@@ -11,21 +11,6 @@ to check liveness and readiness, accordingly
 
 ```
 server.port=9004
-
-# activemq settings
-spring.activemq.broker-url=tcp://activemq:61616
-#spring.activemq.pooled=true
-spring.activemq.user=admin
-spring.activemq.password=admin
-spring.jms.pub-sub-domain=true
-
-# marduk file upload queue
-queue.upload.destination.name=MardukInboundQueue
-
-# blob store config
-blobstore.gcs.project.id=carbon-1287
-blobstore.gcs.container.name=marduk-exchange
-blobstore.gcs.credential.path=/home/tomgag/.ssh/Carbon-a4d50ca8176c.json
 
 # JPA settings (in-memory)
 spring.jpa.show-sql=false
@@ -42,15 +27,6 @@ logging.level.org.apache=INFO
 
 server.port=9006
 
-# activemq settings
-spring.activemq.broker-url=tcp://activemq:61616
-#spring.activemq.pooled=true
-spring.activemq.user=admin
-spring.activemq.password=admin
-
-# marduk file upload queue
-queue.upload.destination.name=MardukInboundQueue
-
 # logging settings
 logging.level.org.hibernate.tool.hbm2ddl=INFO
 logging.level.org.hibernate.SQL=INFO
@@ -58,11 +34,6 @@ logging.level.org.hibernate.type=WARN
 logging.level.org.springframework.orm.hibernate4.support=WARN
 logging.level.no.rutebanken=INFO
 logging.level.org.apache=WARN
-
-# blobstore settings
-blobstore.gcs.project.id=carbon-1287
-blobstore.gcs.container.name=marduk-exchange
-blobstore.gcs.credential.path=/home/tomgag/.ssh/Carbon-a4d50ca8176c.json
 
 # JPA settings (postgres)
 spring.jpa.database=POSTGRESQL
@@ -152,3 +123,4 @@ The schema of this database must be exactly equivalent to the first migration fi
 ## Schema changes
 Create a new file according to the flyway documentation in the folder `resources/db/migrations`.
 Commit the migration together with code changes that requires this schema change.
+
