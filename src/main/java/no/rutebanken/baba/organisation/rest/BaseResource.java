@@ -21,6 +21,8 @@ import no.rutebanken.baba.organisation.repository.VersionedEntityRepository;
 import no.rutebanken.baba.organisation.rest.dto.BaseDTO;
 import no.rutebanken.baba.organisation.rest.mapper.DTOMapper;
 import no.rutebanken.baba.organisation.rest.validation.DTOValidator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataRetrievalFailureException;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +36,8 @@ import java.util.stream.Collectors;
 
 @Transactional
 public abstract class BaseResource<E extends VersionedEntity, D extends BaseDTO> {
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
     protected abstract VersionedEntityRepository<E> getRepository();
 
@@ -82,7 +86,9 @@ public abstract class BaseResource<E extends VersionedEntity, D extends BaseDTO>
     }
 
     protected List<D> listAllEntities(boolean fullDetails) {
-        return getRepository().findAll().stream().map(r -> getMapper().toDTO(r, fullDetails)).collect(Collectors.toList());
+        List<E> allUsers = getRepository().findAll();
+        logger.info("Found " + allUsers.size() + "user(s)");
+        return allUsers.stream().map(r -> getMapper().toDTO(r, fullDetails)).collect(Collectors.toList());
     }
 
     protected Response buildCreatedResponse(UriInfo uriInfo, E entity) {
