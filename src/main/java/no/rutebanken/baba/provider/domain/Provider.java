@@ -35,10 +35,14 @@ public class Provider {
     public Long id;
     public String name;
     public String sftpAccount;
+    public boolean idfm;
+    public String codeIdfm;
+
     @OneToOne(cascade = {CascadeType.ALL})
     public ChouetteInfo chouetteInfo;
 
     public Provider(){}
+
 
     public Provider(Long id, String name, String sftpAccount, ChouetteInfo chouetteInfo) {
         this.id = id;
@@ -112,4 +116,22 @@ public class Provider {
     public void setChouetteInfo(ChouetteInfo chouetteInfo) {
         this.chouetteInfo = chouetteInfo;
     }
+
+
+    public boolean isIdfm() {
+        return idfm;
+    }
+
+    public void setIdfm(boolean idfm) {
+        this.idfm = idfm;
+    }
+
+    public String getCodeIdfm() {
+        return codeIdfm;
+    }
+
+    public void setCodeIdfm(String codeIdfm) {
+        this.codeIdfm = codeIdfm;
+    }
+
 }
