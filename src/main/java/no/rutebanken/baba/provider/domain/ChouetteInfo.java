@@ -43,6 +43,8 @@ public class ChouetteInfo {
     public String xmlnsurl;
     public String referential;
     public String organisation;
+    public boolean idfm;
+    public String codeIdfm;
     @Column(name = "cuser")
     public String user;
     public String regtoppVersion;
