@@ -44,7 +44,7 @@ public class JpaProviderRepositoryTest extends BaseIntegrationTest {
     public void testGetProviderById() {
         Provider provider = repository.getProvider(42L);
         assertThat(provider).isEqualTo(new Provider(42L, "Flybussekspressen", "42",
-                                                           new ChouetteInfo(1L, "flybussekspressen", "http://www.ns.1", "flybussekspressen", "Rutebanken", "admin@rutebanken.org")));
+                                                           new ChouetteInfo(1L, "flybussekspressen", "http://www.ns.1", "flybussekspressen", "Rutebanken", "admin@rutebanken.org"), true, null));
     }
 
 
