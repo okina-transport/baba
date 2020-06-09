@@ -51,6 +51,12 @@ public class Provider {
         this.chouetteInfo = chouetteInfo;
     }
 
+    public Provider(Long id, String name, String sftpAccount, ChouetteInfo chouetteInfo, boolean idfm, String codeIdfm) {
+        this(id, name, sftpAccount, chouetteInfo);
+        this.idfm = idfm;
+        this.codeIdfm = codeIdfm;
+    }
+
     @Override
     public String toString() {
         return "Provider{" +
