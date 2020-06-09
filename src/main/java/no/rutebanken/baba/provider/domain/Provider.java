@@ -64,6 +64,7 @@ public class Provider {
                 ", name='" + name + '\'' +
                 ", sftpAccount='" + sftpAccount + '\'' +
                 ", chouetteInfo=" + chouetteInfo +
+                ", idfm=" + idfm + ", codeIdfm=" + codeIdfm +
                 '}';
     }
 
