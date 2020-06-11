@@ -35,8 +35,6 @@ public class Provider {
     public Long id;
     public String name;
     public String sftpAccount;
-    public boolean idfm;
-    public String codeIdfm;
 
     @OneToOne(cascade = {CascadeType.ALL})
     public ChouetteInfo chouetteInfo;
@@ -51,12 +49,6 @@ public class Provider {
         this.chouetteInfo = chouetteInfo;
     }
 
-    public Provider(Long id, String name, String sftpAccount, ChouetteInfo chouetteInfo, boolean idfm, String codeIdfm) {
-        this(id, name, sftpAccount, chouetteInfo);
-        this.idfm = idfm;
-        this.codeIdfm = codeIdfm;
-    }
-
     @Override
     public String toString() {
         return "Provider{" +
@@ -64,7 +56,6 @@ public class Provider {
                 ", name='" + name + '\'' +
                 ", sftpAccount='" + sftpAccount + '\'' +
                 ", chouetteInfo=" + chouetteInfo +
-                ", idfm=" + idfm + ", codeIdfm=" + codeIdfm +
                 '}';
     }
 
@@ -122,23 +113,6 @@ public class Provider {
 
     public void setChouetteInfo(ChouetteInfo chouetteInfo) {
         this.chouetteInfo = chouetteInfo;
-    }
-
-
-    public boolean isIdfm() {
-        return idfm;
-    }
-
-    public void setIdfm(boolean idfm) {
-        this.idfm = idfm;
-    }
-
-    public String getCodeIdfm() {
-        return codeIdfm;
-    }
-
-    public void setCodeIdfm(String codeIdfm) {
-        this.codeIdfm = codeIdfm;
     }
 
 }

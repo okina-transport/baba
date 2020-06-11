@@ -100,6 +100,8 @@ public class ChouetteInfo {
                        ", enableAutoImport='" + enableAutoImport + '\'' +
                        ", generateMissingServiceLinksForModes='" + generateMissingServiceLinksForModes + '\'' +
                        ", generateDatedServiceJourneyIds='" + generateDatedServiceJourneyIds + '\'' +
+                        ", idfm=" + idfm +
+                        ", codeIdfm=" + codeIdfm +
                        '}';
     }
 
