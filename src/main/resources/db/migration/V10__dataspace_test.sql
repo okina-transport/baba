@@ -6,7 +6,7 @@ VALUES (2, 'TEST', 'http://ratp.mosaic.pro/test', 'mosaic_test', 'Mosaic', 'mosa
 INSERT INTO public.provider (id, name, sftp_account, chouette_info_id)
 VALUES (1, 'test', 'test', 1);
 INSERT INTO public.provider (id, name, sftp_account, chouette_info_id)
-VALUES (2, 'mosaic_test', mosaic_test, 2);
+VALUES (2, 'mosaic_test', 'mosaic_test', 2);
 INSERT INTO code_space (pk, entity_version, lock_version, private_code, xmlns, xmlns_url) VALUES (1, 1, 1, 'mosaic_test', 'TEST', 'http://ratp.mosaic.pro/test');
 INSERT INTO organisation (pk, dtype, entity_version, lock_version, code_space_pk, private_code, name) VALUES (1, 'Authority', 1, 1, 1, 'mosaic_test', 'mosaic_test');
 INSERT INTO responsibility_set (pk, entity_version, lock_version, code_space_pk, private_code, name) VALUES (1, 1, 1, 1, 'test', 'test');
