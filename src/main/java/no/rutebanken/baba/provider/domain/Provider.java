@@ -19,12 +19,7 @@ package no.rutebanken.baba.provider.domain;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity
@@ -33,6 +28,9 @@ public class Provider {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     public Long id;
+    @Column(name="mosaic_id")
+    public Long mosaicId;
+
     public String name;
     public String sftpAccount;
 
