@@ -42,6 +42,12 @@ public class JpaProviderRepository implements ProviderRepository {
         return this.entityManager.createQuery("SELECT p FROM Provider p order by p.id", Provider.class).setHint("org.hibernate.cacheable", Boolean.TRUE).getResultList();
     }
 
+	public Provider getProviderByReferential(String referential) {
+		return this.entityManager.createQuery("SELECT p FROM Provider p where p.chouetteInfo.referential=:referential", Provider.class)
+				.setParameter("referential", referential)
+				.getSingleResult();
+	}
+
     @Override
     public Provider getProvider(Long id) {
         return entityManager.find(Provider.class, id);
