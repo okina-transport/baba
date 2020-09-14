@@ -48,6 +48,13 @@ public class JpaProviderRepository implements ProviderRepository {
 				.getSingleResult();
 	}
 
+	public void updateMosaicIdByName(String name, Long mosaicId) {
+		this.entityManager.createNativeQuery("update provider set mosaic_id=:mosaicId where name=:name")
+				.setParameter("mosaicId", mosaicId)
+				.setParameter("name", name)
+				.executeUpdate();
+	}
+
     @Override
     public Provider getProvider(Long id) {
         return entityManager.find(Provider.class, id);

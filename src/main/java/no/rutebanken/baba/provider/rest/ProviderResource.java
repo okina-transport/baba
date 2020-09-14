@@ -29,6 +29,7 @@ import org.springframework.stereotype.Component;
 
 import javax.ws.rs.*;
 import java.util.Collection;
+import java.util.List;
 
 import static org.rutebanken.helper.organisation.AuthorizationConstants.ROLE_ROUTE_DATA_ADMIN;
 import static org.rutebanken.helper.organisation.AuthorizationConstants.ROLE_ROUTE_DATA_EDIT;
@@ -91,6 +92,18 @@ public class ProviderResource {
     public Provider createProvider(Provider provider) {
         logger.info("Creating provider " + provider);
         return providerRepository.createProvider(provider);
+    }
+
+
+    @POST
+    @Path("/sync")
+//    @PreAuthorize("isAuthenticated()")
+    public List<Provider> syncProviders(List<Provider> providers) {
+        logger.info("Synching providers ");
+        providers.forEach(p -> {
+            providerRepository.updateMosaicIdByName(p.name, p.mosaicId);
+        });
+        return providers;
     }
 
     @GET

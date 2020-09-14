@@ -34,4 +34,6 @@ public interface ProviderRepository {
 
 	void deleteProvider(Long providerId);
 
+    void updateMosaicIdByName(String name, Long mosaicId);
+
 }
