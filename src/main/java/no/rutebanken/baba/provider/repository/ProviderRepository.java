@@ -19,6 +19,7 @@ package no.rutebanken.baba.provider.repository;
 import no.rutebanken.baba.provider.domain.Provider;
 
 import java.util.Collection;
+import java.util.Optional;
 
 public interface ProviderRepository {
 
@@ -26,7 +27,7 @@ public interface ProviderRepository {
 
     Provider getProvider(Long id);
 
-    Provider getProviderByReferential(String referential);
+    Optional<Provider> getProviderByReferential(String referential);
     
     void updateProvider(Provider provider);
 

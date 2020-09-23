@@ -30,6 +30,7 @@ import org.springframework.stereotype.Component;
 import javax.ws.rs.*;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 import static org.rutebanken.helper.organisation.AuthorizationConstants.ROLE_ROUTE_DATA_ADMIN;
 import static org.rutebanken.helper.organisation.AuthorizationConstants.ROLE_ROUTE_DATA_EDIT;
@@ -64,11 +65,11 @@ public class ProviderResource {
     @PreAuthorize("hasRole('" + ROLE_ROUTE_DATA_ADMIN + "') or @providerAuthenticationService.hasRoleForProvider(authentication,'" + ROLE_ROUTE_DATA_EDIT + "',#providerId)")
     public Provider getProvider(@QueryParam("referential") String referential) {
         logger.debug("Returning provider with referential '" + referential + "'");
-        Provider provider = providerRepository.getProviderByReferential(referential);
-        if (provider == null) {
-            throw new NotFoundException("Unable to find provider with referential=" + referential);
+        Optional<Provider> provider = providerRepository.getProviderByReferential(referential);
+        if (!provider.isPresent()) {
+            throw new NotFoundException("No provider found matching referential " + referential);
         }
-        return provider;
+        return provider.get();
     }
 
     @DELETE
