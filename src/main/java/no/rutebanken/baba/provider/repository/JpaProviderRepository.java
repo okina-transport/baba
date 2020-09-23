@@ -26,6 +26,8 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 
 @Repository
@@ -42,10 +44,11 @@ public class JpaProviderRepository implements ProviderRepository {
         return this.entityManager.createQuery("SELECT p FROM Provider p order by p.id", Provider.class).setHint("org.hibernate.cacheable", Boolean.TRUE).getResultList();
     }
 
-	public Provider getProviderByReferential(String referential) {
-		return this.entityManager.createQuery("SELECT p FROM Provider p where p.chouetteInfo.referential=:referential", Provider.class)
+	public Optional<Provider> getProviderByReferential(String referential) {
+		List<Provider> providers = this.entityManager.createQuery("SELECT p FROM Provider p where p.chouetteInfo.referential=:referential", Provider.class)
 				.setParameter("referential", referential)
-				.getSingleResult();
+				.getResultList();
+		return !providers.isEmpty() ? Optional.of(providers.get(0)) : Optional.empty();
 	}
 
 	public void updateMosaicIdByName(String name, Long mosaicId) {
