@@ -17,6 +17,7 @@
 package no.rutebanken.baba.provider.repository;
 
 
+import no.rutebanken.baba.provider.domain.ChouetteInfo;
 import no.rutebanken.baba.provider.domain.Provider;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -55,6 +56,15 @@ public class JpaProviderRepository implements ProviderRepository {
 		this.entityManager.createNativeQuery("update provider set mosaic_id=:mosaicId where name=:name")
 				.setParameter("mosaicId", mosaicId)
 				.setParameter("name", name)
+				.executeUpdate();
+	}
+
+	public void updateChouetteInfo(String cuser, String codeIdfm, String nameNetexStopIdfm, String nameNetexOffreIdfm) {
+		this.entityManager.createNativeQuery("update chouette_info set code_idfm=:codeIdfm, name_netex_stop_idfm=:nameNetexStopIdfm, name_netex_offre_idfm=:nameNetexOffreIdfm where cuser=:cuser")
+				.setParameter("cuser", cuser)
+				.setParameter("codeIdfm", codeIdfm)
+				.setParameter("nameNetexStopIdfm", nameNetexStopIdfm)
+				.setParameter("nameNetexOffreIdfm", nameNetexOffreIdfm)
 				.executeUpdate();
 	}
 
