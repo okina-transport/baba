@@ -103,7 +103,9 @@ public class ProviderResource {
         logger.info("Synching providers ");
         providers.forEach(p -> {
             providerRepository.updateMosaicIdByName(p.name, p.mosaicId);
-            providerRepository.updateChouetteInfo(p.chouetteInfo.user, p.chouetteInfo.codeIdfm, p.chouetteInfo.nameNetexStopIdfm, p.chouetteInfo.nameNetexOffreIdfm);
+            if(p.chouetteInfo != null){
+                providerRepository.updateChouetteInfo(p.chouetteInfo.user, p.chouetteInfo.codeIdfm, p.chouetteInfo.nameNetexStopIdfm, p.chouetteInfo.nameNetexOffreIdfm);
+            }
         });
         return providers;
     }
