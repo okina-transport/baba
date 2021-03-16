@@ -102,7 +102,7 @@ public class ProviderResource {
     public List<Provider> syncProviders(List<Provider> providers) {
         logger.info("Synching providers ");
         providers.forEach(p -> {
-            providerRepository.updateMosaicIdByName(p.name, p.mosaicId);
+            providerRepository.updateMobiitiIdByName(p.name, p.mobiitiId);
             if(p.chouetteInfo != null){
                 providerRepository.updateChouetteInfo(p.chouetteInfo.user, p.chouetteInfo.codeIdfm, p.chouetteInfo.nameNetexStopIdfm, p.chouetteInfo.nameNetexOffreIdfm);
             }

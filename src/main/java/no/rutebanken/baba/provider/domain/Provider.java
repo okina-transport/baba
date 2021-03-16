@@ -28,8 +28,8 @@ public class Provider {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     public Long id;
-    @Column(name="mosaic_id")
-    public Long mosaicId;
+    @Column(name="mobiiti_id")
+    public Long mobiitiId;
 
     public String name;
     public String sftpAccount;

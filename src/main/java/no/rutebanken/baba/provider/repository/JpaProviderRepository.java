@@ -52,9 +52,9 @@ public class JpaProviderRepository implements ProviderRepository {
 		return !providers.isEmpty() ? Optional.of(providers.get(0)) : Optional.empty();
 	}
 
-	public void updateMosaicIdByName(String name, Long mosaicId) {
-		this.entityManager.createNativeQuery("update provider set mosaic_id=:mosaicId where name=:name")
-				.setParameter("mosaicId", mosaicId)
+	public void updateMobiitiIdByName(String name, Long mobiitiId) {
+		this.entityManager.createNativeQuery("update provider set mobiiti_id=:mobiitiId where name=:name")
+				.setParameter("mobiitiId", mobiitiId)
 				.setParameter("name", name)
 				.executeUpdate();
 	}
