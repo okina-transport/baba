@@ -36,7 +36,7 @@ public interface ProviderRepository {
 
 	void deleteProvider(Long providerId);
 
-    void updateMobiitiIdByName(String name, Long mobiitiId);
+    void updateProviderInfoByName(String name, Long mobiitiId, String email);
 
     void updateChouetteInfo(String cuser, String codeIdfm, String nameNetexStopIdfm, String nameNetexOffreIdfm);
 

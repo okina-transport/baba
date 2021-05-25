@@ -33,6 +33,7 @@ public class Provider {
 
     public String name;
     public String sftpAccount;
+    public String email;
 
     @OneToOne(cascade = {CascadeType.ALL})
     public ChouetteInfo chouetteInfo;
@@ -40,10 +41,11 @@ public class Provider {
     public Provider(){}
 
 
-    public Provider(Long id, String name, String sftpAccount, ChouetteInfo chouetteInfo) {
+    public Provider(Long id, String name, String sftpAccount, String email, ChouetteInfo chouetteInfo) {
         this.id = id;
         this.name = name;
         this.sftpAccount = sftpAccount;
+        this.email = email;
         this.chouetteInfo = chouetteInfo;
     }
 
@@ -53,6 +55,7 @@ public class Provider {
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", sftpAccount='" + sftpAccount + '\'' +
+                ", email='" + email + '\'' +
                 ", chouetteInfo=" + chouetteInfo +
                 '}';
     }
@@ -68,6 +71,7 @@ public class Provider {
         if (name != null ? !name.equals(provider.name) : provider.name != null) return false;
         if (sftpAccount != null ? !sftpAccount.equals(provider.sftpAccount) : provider.sftpAccount != null)
             return false;
+        if (email != null ? !email.equals(provider.email) : provider.email != null) return false;
         return chouetteInfo != null ? chouetteInfo.equals(provider.chouetteInfo) : provider.chouetteInfo == null;
 
     }
@@ -77,6 +81,7 @@ public class Provider {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (name != null ? name.hashCode() : 0);
         result = 31 * result + (sftpAccount != null ? sftpAccount.hashCode() : 0);
+        result = 31 * result + (email != null ? email.hashCode() : 0);
         result = 31 * result + (chouetteInfo != null ? chouetteInfo.hashCode() : 0);
         return result;
     }
@@ -103,6 +108,14 @@ public class Provider {
 
     public void setSftpAccount(String sftpAccount) {
         this.sftpAccount = sftpAccount;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public ChouetteInfo getChouetteInfo() {
