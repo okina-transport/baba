@@ -212,7 +212,7 @@ ALTER TABLE event_filter_entity_classifications OWNER TO baba;
 --
 
 CREATE SEQUENCE hibernate_sequence
-    START WITH 1
+    START WITH 10
     INCREMENT BY 1
     NO MINVALUE
     NO MAXVALUE
