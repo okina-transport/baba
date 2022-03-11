@@ -16,9 +16,12 @@
 
 package no.rutebanken.baba.hazelcast;
 
+
+import com.hazelcast.config.EvictionConfig;
 import com.hazelcast.config.EvictionPolicy;
+
+
 import com.hazelcast.config.MapConfig;
-import com.hazelcast.config.MaxSizeConfig;
 import com.hazelcast.core.HazelcastInstance;
 import no.rutebanken.baba.organisation.model.user.User;
 import org.rutebanken.hazelcasthelper.service.HazelCastService;
@@ -47,8 +50,10 @@ public class BabaHazelcastService extends HazelCastService {
      */
     private static final int MAX_HEAP_PERCENTAGE_SECOND_LEVEL_CACHE = 2;
 
-    public BabaHazelcastService(@Autowired KubernetesService kubernetesService, @Value("${hazelcast.management.url:}") String hazelcastManagementUrl) {
-        super(kubernetesService, hazelcastManagementUrl);
+    public BabaHazelcastService(@Autowired KubernetesService kubernetesService) {
+
+        super(kubernetesService);
+        logger.info("ignoreXxeProtectionFailures : " + Boolean.getBoolean("hazelcast.ignoreXxeProtectionFailures"));
     }
 
     /**
@@ -60,6 +65,9 @@ public class BabaHazelcastService extends HazelCastService {
     public List<MapConfig> getAdditionalMapConfigurations() {
         List<MapConfig> mapConfigs = super.getAdditionalMapConfigurations();
 
+        EvictionConfig evictionConfig = new EvictionConfig();
+        evictionConfig.setEvictionPolicy(EvictionPolicy.LFU);
+
         mapConfigs.add(
                 // Configure map for hibernate second level cache
                 new MapConfig()
@@ -67,10 +75,8 @@ public class BabaHazelcastService extends HazelCastService {
                         // No sync backup for hibernate cache
                         .setBackupCount(0)
                         .setAsyncBackupCount(2)
-                        .setEvictionPolicy(EvictionPolicy.LFU)
-                        .setTimeToLiveSeconds(604800)
-                        .setMaxSizeConfig(
-                                new MaxSizeConfig(MAX_HEAP_PERCENTAGE_SECOND_LEVEL_CACHE, MaxSizeConfig.MaxSizePolicy.USED_HEAP_PERCENTAGE)));
+                        .setEvictionConfig(evictionConfig)
+                        .setTimeToLiveSeconds(604800));
 
         logger.info("Configured map for hibernate second level cache: {}", mapConfigs.get(0));
         return mapConfigs;
