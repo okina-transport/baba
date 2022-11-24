@@ -66,6 +66,7 @@
 
         <maven-javadoc-plugin.version>2.9.1</maven-javadoc-plugin.version>
         <docker.port.container.jolokia>8778</docker.port.container.jolokia>
+        <docker.env.JAVA_OPTS>-Xmx800m</docker.env.JAVA_OPTS>
         <jackson-jaxrs-xml-provider.version>2.9.0</jackson-jaxrs-xml-provider.version>
 
         <flyway-core.version>4.2.0</flyway-core.version>
