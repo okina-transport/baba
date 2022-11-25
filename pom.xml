@@ -26,7 +26,7 @@
 
     <groupId>no.rutebanken</groupId>
     <artifactId>baba</artifactId>
-    <version>1.0.4-mobi-iti-SNAPSHOT</version>
+    <version>1.0.4-mobi-iti-SNAPSHOT-SANSHAZEL</version>
     <packaging>jar</packaging>
 
     <name>Baba</name>
@@ -52,7 +52,6 @@
         <docker.from>registry.okina.fr/okina/java-base-image</docker.from>
         <docker.image>registry.okina.fr/mobiiti/${project.artifactId}:${project.version}</docker.image>
         <docker.cleanup>none</docker.cleanup>
-        <hazelcast-hibernate5.version>2.2.0</hazelcast-hibernate5.version>
         <fabric8.service.name>springboot-webmvc</fabric8.service.name>
         <fabric8.service.port>80</fabric8.service.port>
         <fabric8.service.containerPort>9004</fabric8.service.containerPort>
@@ -81,7 +80,7 @@
         <swagger-jersey2.version>1.5.16</swagger-jersey2.version>
         <javax.jdo.jdo2-api.version>2.3-eb</javax.jdo.jdo2-api.version>
         <okina-helpers.version>1.0.24</okina-helpers.version>
-        <hazelcast.version>4.1.8</hazelcast.version>
+
     </properties>
 
     <dependencyManagement>
@@ -164,25 +163,6 @@
 
         </dependency>
 
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast</artifactId>
-            <version>${hazelcast.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.okina.helpers</groupId>
-            <artifactId>hazelcast4-helper</artifactId>
-            <version>${okina-helpers.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.hazelcast</groupId>
-                    <artifactId>hazelcast</artifactId>
-                </exclusion>
-            </exclusions>
-
-
-        </dependency>
         <!-- Due to maven artifact cache, this dependency needs to be explicit -->
         <dependency>
             <groupId>io.fabric8</groupId>
@@ -235,17 +215,6 @@
             <artifactId>spring-boot-starter-jersey</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.hazelcast</groupId>
-            <artifactId>hazelcast-hibernate5</artifactId>
-            <version>${hazelcast-hibernate5.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>com.hazelcast</groupId>
-                    <artifactId>hazelcast</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
