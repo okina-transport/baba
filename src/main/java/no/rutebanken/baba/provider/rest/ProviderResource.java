@@ -104,7 +104,7 @@ public class ProviderResource {
         providers.forEach(p -> {
             providerRepository.updateProviderInfoByName(p.name, p.mobiitiId, p.email);
             if(p.chouetteInfo != null){
-                providerRepository.updateChouetteInfo(p.chouetteInfo.user, p.chouetteInfo.codeIdfm, p.chouetteInfo.nameNetexStopIdfm, p.chouetteInfo.nameNetexOffreIdfm);
+                providerRepository.updateChouetteInfo(p.chouetteInfo.user, p.chouetteInfo.codeIdfm, p.chouetteInfo.nameNetexStopIdfm, p.chouetteInfo.nameNetexOffreIdfm, p.chouetteInfo.prefixNetex);
             }
         });
         return providers;

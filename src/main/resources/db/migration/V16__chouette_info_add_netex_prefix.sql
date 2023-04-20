@@ -1,0 +1,1 @@
+ALTER TABLE public.chouette_info ADD COLUMN prefix_netex varchar(255) null;

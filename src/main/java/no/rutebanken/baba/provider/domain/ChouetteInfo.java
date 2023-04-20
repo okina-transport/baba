@@ -59,6 +59,7 @@ public class ChouetteInfo {
     public boolean generateDatedServiceJourneyIds;
     public String nameNetexStopIdfm;
     public String nameNetexOffreIdfm;
+    public String prefixNetex;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "CHOUETTE_INFO_SERVICE_LINK_MODES", joinColumns = @JoinColumn(name = "CHOUETTE_INFO_ID"))
@@ -102,10 +103,11 @@ public class ChouetteInfo {
                        ", enableAutoImport='" + enableAutoImport + '\'' +
                        ", generateMissingServiceLinksForModes='" + generateMissingServiceLinksForModes + '\'' +
                        ", generateDatedServiceJourneyIds='" + generateDatedServiceJourneyIds + '\'' +
-                        ", idfm=" + idfm + '\'' +
-                        ", codeIdfm=" + codeIdfm + '\'' +
-                        ", nameNetexStopIdfm=" + nameNetexStopIdfm + '\'' +
-                        ", nameNetexOffreIdfm=" + nameNetexOffreIdfm + '\'' +
+                        ", idfm='" + idfm + '\'' +
+                        ", codeIdfm='" + codeIdfm + '\'' +
+                        ", nameNetexStopIdfm='" + nameNetexStopIdfm + '\'' +
+                        ", nameNetexOffreIdfm='" + nameNetexOffreIdfm + '\'' +
+                        ", prefixNetex='" + prefixNetex + '\'' +
                        '}';
     }
 
