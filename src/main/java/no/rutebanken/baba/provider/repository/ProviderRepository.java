@@ -38,6 +38,6 @@ public interface ProviderRepository {
 
     void updateProviderInfoByName(String name, Long mobiitiId, String email);
 
-    void updateChouetteInfo(String cuser, String codeIdfm, String nameNetexStopIdfm, String nameNetexOffreIdfm);
+    void updateChouetteInfo(String cuser, String codeIdfm, String nameNetexStop, String nameNetexOffre);
 
     }

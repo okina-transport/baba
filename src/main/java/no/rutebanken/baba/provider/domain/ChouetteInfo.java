@@ -57,8 +57,8 @@ public class ChouetteInfo {
     public boolean enableCleanImport;
     public boolean enableAutoImport;
     public boolean generateDatedServiceJourneyIds;
-    public String nameNetexStopIdfm;
-    public String nameNetexOffreIdfm;
+    public String nameNetexStop;
+    public String nameNetexOffre;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "CHOUETTE_INFO_SERVICE_LINK_MODES", joinColumns = @JoinColumn(name = "CHOUETTE_INFO_ID"))
@@ -104,8 +104,8 @@ public class ChouetteInfo {
                        ", generateDatedServiceJourneyIds='" + generateDatedServiceJourneyIds + '\'' +
                         ", idfm='" + idfm + '\'' +
                         ", codeIdfm='" + codeIdfm + '\'' +
-                        ", nameNetexStopIdfm='" + nameNetexStopIdfm + '\'' +
-                        ", nameNetexOffreIdfm='" + nameNetexOffreIdfm + '\'' +
+                        ", nameNetexStop='" + nameNetexStop + '\'' +
+                        ", nameNetexOffre='" + nameNetexOffre + '\'' +
                        '}';
     }
 
