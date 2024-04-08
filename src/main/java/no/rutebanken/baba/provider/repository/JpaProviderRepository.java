@@ -60,12 +60,13 @@ public class JpaProviderRepository implements ProviderRepository {
 				.executeUpdate();
 	}
 
-	public void updateChouetteInfo(String cuser, String codeIdfm, String nameNetexStop, String nameNetexOffre) {
-		this.entityManager.createNativeQuery("update chouette_info set code_idfm=:codeIdfm, name_netex_stop=:nameNetexStop, name_netex_offre=:nameNetexOffre where cuser=:cuser")
+	public void updateChouetteInfo(String cuser, String codeIdfm, String nameNetexStop, String nameNetexOffre, String gtfsPrefixExport) {
+		this.entityManager.createNativeQuery("update chouette_info set code_idfm=:codeIdfm, name_netex_stop=:nameNetexStop, name_netex_offre=:nameNetexOffre, gtfs_prefix_export=:gtfsPrefixExport where cuser=:cuser")
 				.setParameter("cuser", cuser)
 				.setParameter("codeIdfm", codeIdfm)
 				.setParameter("nameNetexStop", nameNetexStop)
 				.setParameter("nameNetexOffre", nameNetexOffre)
+				.setParameter("gtfsPrefixExport", gtfsPrefixExport)
 				.executeUpdate();
 	}
 

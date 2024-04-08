@@ -59,6 +59,7 @@ public class ChouetteInfo {
     public boolean generateDatedServiceJourneyIds;
     public String nameNetexStop;
     public String nameNetexOffre;
+    public String gtfsPrefixExport;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "CHOUETTE_INFO_SERVICE_LINK_MODES", joinColumns = @JoinColumn(name = "CHOUETTE_INFO_ID"))
@@ -106,6 +107,7 @@ public class ChouetteInfo {
                         ", codeIdfm='" + codeIdfm + '\'' +
                         ", nameNetexStop='" + nameNetexStop + '\'' +
                         ", nameNetexOffre='" + nameNetexOffre + '\'' +
+                        ", gtfsPrefixExport='" + gtfsPrefixExport + '\'' +
                        '}';
     }
 
