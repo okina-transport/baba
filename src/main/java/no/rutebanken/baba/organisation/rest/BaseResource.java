@@ -87,7 +87,7 @@ public abstract class BaseResource<E extends VersionedEntity, D extends BaseDTO>
 
     protected List<D> listAllEntities(boolean fullDetails) {
         List<E> allUsers = getRepository().findAll();
-        logger.info("Found " + allUsers.size() + "user(s)");
+        logger.info("Found " + allUsers.size() + " user(s)");
         return allUsers.stream().map(r -> getMapper().toDTO(r, fullDetails)).collect(Collectors.toList());
     }
 
