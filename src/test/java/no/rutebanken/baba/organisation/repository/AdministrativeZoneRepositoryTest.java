@@ -16,24 +16,26 @@
 
 package no.rutebanken.baba.organisation.repository;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.LinearRing;
-import com.vividsolutions.jts.geom.Polygon;
+import org.locationtech.jts.geom.Coordinate;
+import org.locationtech.jts.geom.GeometryFactory;
+import org.locationtech.jts.geom.LinearRing;
+import org.locationtech.jts.geom.Polygon;
 import no.rutebanken.baba.organisation.model.organisation.AdministrativeZone;
 import no.rutebanken.baba.organisation.model.organisation.AdministrativeZoneType;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class AdministrativeZoneRepositoryTest extends BaseIntegrationTest {
+
+class AdministrativeZoneRepositoryTest extends BaseIntegrationTest {
 
 	@Autowired
 	private AdministrativeZoneRepository administrativeZoneRepository;
 
 
 	@Test
-	public void testInsertAdministrativeZone() {
+	void testInsertAdministrativeZone() {
 		AdministrativeZone zone = new AdministrativeZone();
 		zone.setPrivateCode("0101");
 		zone.setName("name");
@@ -47,6 +49,8 @@ public class AdministrativeZoneRepositoryTest extends BaseIntegrationTest {
 
 		zone.setPolygon(poly);
 
-		administrativeZoneRepository.saveAndFlush(zone);
-	}
+        AdministrativeZone administrativeZone = administrativeZoneRepository.saveAndFlush(zone);
+
+        assertThat(administrativeZone).isNotNull();
+    }
 }

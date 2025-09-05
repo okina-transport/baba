@@ -20,10 +20,7 @@ import no.rutebanken.baba.organisation.TestConstantsOrganisation;
 import no.rutebanken.baba.organisation.repository.BaseIntegrationTest;
 import no.rutebanken.baba.organisation.rest.dto.organisation.OrganisationDTO;
 import no.rutebanken.baba.organisation.rest.dto.organisation.OrganisationPartDTO;
-import org.junit.Assert;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
@@ -32,23 +29,21 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class OrganisationResourceIntegrationTest extends BaseIntegrationTest {
+import static org.assertj.core.api.Assertions.assertThat;
 
-    @Autowired
-    private TestRestTemplate restTemplate;
+class OrganisationResourceIntegrationTest extends BaseIntegrationTest {
 
     private static final String PATH = "/services/organisations";
 
     @Test
-    public void organisationNotFound() throws Exception {
+    void organisationNotFound() {
         ResponseEntity<OrganisationDTO> entity = restTemplate.getForEntity(PATH + "/unknownOrganisation",
                 OrganisationDTO.class);
-        Assert.assertEquals(HttpStatus.NOT_FOUND, entity.getStatusCode());
+        assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test
-    public void crudOrganisation() throws Exception {
-
+    void crudOrganisation() {
         OrganisationDTO createOrganisation = createOrganisation("TheOrg", "Org name", null);
         URI uri = restTemplate.postForLocation(PATH, createOrganisation);
         assertOrganisation(createOrganisation, uri);
@@ -56,7 +51,7 @@ public class OrganisationResourceIntegrationTest extends BaseIntegrationTest {
         OrganisationPartDTO orgPart1 = new OrganisationPartDTO();
         orgPart1.name = "part 1";
 
-        OrganisationDTO updateOrganisation = createOrganisation(createOrganisation.privateCode, "newOrg name", 2l, orgPart1);
+        OrganisationDTO updateOrganisation = createOrganisation(createOrganisation.privateCode, "newOrg name", 2L, orgPart1);
         restTemplate.put(uri, updateOrganisation);
         assertOrganisation(updateOrganisation, uri);
 
@@ -68,12 +63,12 @@ public class OrganisationResourceIntegrationTest extends BaseIntegrationTest {
 
         ResponseEntity<OrganisationDTO> entity = restTemplate.getForEntity(uri,
                 OrganisationDTO.class);
-        Assert.assertEquals(HttpStatus.NOT_FOUND, entity.getStatusCode());
+        assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 
     }
 
     @Test
-    public void updateOrganisationParts() throws Exception {
+    void updateOrganisationParts() {
         OrganisationPartDTO orgPart1 = new OrganisationPartDTO();
         orgPart1.name = "part 1";
         orgPart1.administrativeZoneRefs = ResourceTestUtils.addAdminZones(restTemplate, "amd1", "adm2");
@@ -85,7 +80,7 @@ public class OrganisationResourceIntegrationTest extends BaseIntegrationTest {
         URI uri = restTemplate.postForLocation(PATH, organisation);
         assertOrganisation(organisation, uri);
 
-        orgPart1.administrativeZoneRefs.remove(0);
+        orgPart1.administrativeZoneRefs.removeFirst();
         orgPart1.administrativeZoneRefs.addAll(ResourceTestUtils.addAdminZones(restTemplate, "adm3"));
 
         restTemplate.put(uri, organisation);
@@ -106,8 +101,8 @@ public class OrganisationResourceIntegrationTest extends BaseIntegrationTest {
 
 
     private void assertOrganisationInArray(OrganisationDTO organisation, OrganisationDTO[] array) {
-        Assert.assertNotNull(array);
-        Assert.assertTrue(Arrays.stream(array).anyMatch(r -> r.privateCode.equals(organisation.privateCode)));
+        assertThat(array).isNotNull();
+        assertThat(Arrays.stream(array).anyMatch(r -> r.privateCode.equals(organisation.privateCode))).isTrue();
     }
 
     protected OrganisationDTO createOrganisation(String privateCode, String name, Long companyNumber, OrganisationPartDTO... parts) {
@@ -126,19 +121,20 @@ public class OrganisationResourceIntegrationTest extends BaseIntegrationTest {
 
 
     protected void assertOrganisation(OrganisationDTO inOrganisation, URI uri) {
-        Assert.assertNotNull(uri);
+        assertThat(uri).isNotNull();
         ResponseEntity<OrganisationDTO> rsp = restTemplate.getForEntity(uri, OrganisationDTO.class);
         OrganisationDTO outOrganisation = rsp.getBody();
-        Assert.assertEquals(inOrganisation.name, outOrganisation.name);
-        Assert.assertEquals(inOrganisation.privateCode, outOrganisation.privateCode);
-        Assert.assertEquals(inOrganisation.companyNumber, outOrganisation.companyNumber);
+        assertThat(outOrganisation).isNotNull();
+        assertThat(outOrganisation.name).isEqualTo(inOrganisation.name);
+        assertThat(outOrganisation.privateCode).isEqualTo(inOrganisation.privateCode);
+        assertThat(outOrganisation.companyNumber).isEqualTo(inOrganisation.companyNumber);
 
         if (CollectionUtils.isEmpty(inOrganisation.parts)) {
-            Assert.assertTrue(CollectionUtils.isEmpty(outOrganisation.parts));
+            assertThat(outOrganisation.parts).isEmpty();
         } else {
-            Assert.assertEquals(inOrganisation.parts.size(), outOrganisation.parts.size());
+            assertThat(inOrganisation.parts).hasSameSizeAs(outOrganisation.parts);
             for (OrganisationPartDTO in : inOrganisation.parts) {
-                Assert.assertTrue(outOrganisation.parts.stream().anyMatch(out -> isEqual(in, out)));
+                assertThat(outOrganisation.parts.stream().anyMatch(out -> isEqual(in, out))).isTrue();
             }
         }
 
@@ -160,23 +156,24 @@ public class OrganisationResourceIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void createInvalidOrganisation() throws Exception {
+    void createInvalidOrganisation() {
         OrganisationPartDTO partWithoutName = new OrganisationPartDTO();
         OrganisationDTO inOrganisation = createOrganisation("privateCode", "organisation name", null, partWithoutName);
         ResponseEntity<String> rsp = restTemplate.postForEntity(PATH, inOrganisation, String.class);
 
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, rsp.getStatusCode());
+        assertThat(rsp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
     @Test
-    public void createOrgWithExistingPrivateCode() throws Exception {
+    void createOrgWithExistingPrivateCode() {
         OrganisationDTO inOrganisation = createOrganisation("OrgPrivateCode", "organisation name", null);
         ResponseEntity<String> firstRsp = restTemplate.postForEntity(PATH, inOrganisation, String.class);
 
-        Assert.assertEquals(HttpStatus.CREATED, firstRsp.getStatusCode());
+        assertThat(firstRsp.getStatusCode()).isEqualTo(HttpStatus.CREATED);
 
         ResponseEntity<String> secondRsp = restTemplate.postForEntity(PATH, inOrganisation, String.class);
-        Assert.assertEquals(HttpStatus.CONFLICT, secondRsp.getStatusCode());
+
+        assertThat(secondRsp.getStatusCode()).isEqualTo(HttpStatus.CONFLICT);
     }
 
 }

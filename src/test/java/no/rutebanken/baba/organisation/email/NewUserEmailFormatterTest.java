@@ -16,44 +16,41 @@
 
 package no.rutebanken.baba.organisation.email;
 
-import no.rutebanken.baba.BabaTestApp;
 import no.rutebanken.baba.organisation.model.user.ContactDetails;
 import no.rutebanken.baba.organisation.model.user.User;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import no.rutebanken.baba.organisation.repository.BaseIntegrationTest;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Locale;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(classes = BabaTestApp.class)
-public class NewUserEmailFormatterTest {
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+
+
+class NewUserEmailFormatterTest extends BaseIntegrationTest {
+
     @Autowired
     private NewUserEmailFormatter emailFormatter;
 
     @Test
-    public void testFormatNewUserEmail() {
+    void testFormatNewUserEmail() {
         ContactDetails contactDetails = new ContactDetails();
         contactDetails.setEmail("e@e.org");
         contactDetails.setFirstName("First");
         contactDetails.setLastName("Last");
         User user = User.builder().withContactDetails(contactDetails).withUsername("test-user").build();
 
-        String msg = emailFormatter.formatMessage(user,  new Locale("no"));
+        String msg = emailFormatter.formatMessage(user,  Locale.of("no"));
 
-        Assert.assertTrue(msg.startsWith("<html>"));
-        Assert.assertTrue(msg.contains(contactDetails.getFirstName() + " " + contactDetails.getLastName()));
-        Assert.assertTrue(msg.contains(user.getUsername()));
-
-        System.out.println(msg);
+        assertTrue(msg.startsWith("<html>"));
+        assertTrue(msg.contains(contactDetails.getFirstName() + " " + contactDetails.getLastName()));
+        assertTrue(msg.contains(user.getUsername()));
     }
 
     @Test
-    public void testGetNewUserEmailSubject() {
-        Assert.assertEquals("Référential Multimodal Régional - Création de compte", emailFormatter.getSubject(Locale.FRENCH));
+    void testGetNewUserEmailSubject() {
+        assertEquals("Référential Multimodal Régional - Création de compte", emailFormatter.getSubject(Locale.FRENCH));
     }
 
 }

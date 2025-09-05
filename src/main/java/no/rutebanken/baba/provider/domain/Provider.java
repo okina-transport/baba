@@ -19,7 +19,7 @@ package no.rutebanken.baba.provider.domain;
 import org.hibernate.annotations.Cache;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 
 @Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity

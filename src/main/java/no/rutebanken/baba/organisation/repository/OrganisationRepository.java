@@ -18,5 +18,8 @@ package no.rutebanken.baba.organisation.repository;
 
 import no.rutebanken.baba.organisation.model.organisation.Organisation;
 
+import java.util.List;
+
 public interface OrganisationRepository extends VersionedEntityRepository<Organisation> {
+    List<Organisation> findByName(String name);
 }

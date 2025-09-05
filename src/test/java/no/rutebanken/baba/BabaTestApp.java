@@ -25,12 +25,13 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.FilterType;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
+
 @SpringBootApplication
 @EnableJpaRepositories(basePackages = {"no.rutebanken.baba.organisation.repository"},
         repositoryBaseClass = BaseRepositoryImpl.class)
 @ComponentScan(excludeFilters = {
-                                        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = BabaSecurityConfiguration.class),
-                                        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = App.class),
+        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = App.class),
+        @ComponentScan.Filter(type = FilterType.ASSIGNABLE_TYPE, value = BabaSecurityConfiguration.class),
 })
 public class BabaTestApp {
 

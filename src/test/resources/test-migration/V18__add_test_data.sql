@@ -1,10 +1,11 @@
 insert into chouette_info(id, xmlns, xmlnsurl, referential, organisation, cuser, regtopp_version, regtopp_coordinate_projection,data_format,enable_validation,allow_create_missing_stop_place, enable_stop_place_id_mapping, enable_clean_import, enable_auto_import, generate_dated_service_journey_ids) values (1, 'flybussekspressen', 'http://www.ns.1','flybussekspressen', 'Rutebanken', 'admin@rutebanken.org', 'R12', 'EPSG:32632','regtopp',false,true,true,false,true, false);
 insert into chouette_info(id, xmlns, xmlnsurl, referential, organisation, cuser, regtopp_version, regtopp_coordinate_projection,data_format,enable_validation,allow_create_missing_stop_place, enable_stop_place_id_mapping, enable_clean_import, enable_auto_import, generate_dated_service_journey_ids) values (2, 'flybussekspressen2', 'http://www.ns.2','flybussekspressen2', 'Rutebanken2', 'admin2@rutebanken.org', 'R12', 'EPSG:32632','regtopp',false,true,true,false,true, false);
 
-insert into provider(id, name, sftp_account, chouette_info_id) values (42, 'Flybussekspressen', '42', 1);
+insert into provider(id, name, sftp_account, chouette_info_id, email) values (42, 'Flybussekspressen', '42', 1, 'test@test.com');
 insert into provider(id, name, chouette_info_id) values (43, 'Flybussekspressen2', 2);
 
 insert into code_space (pk, entity_version,lock_version,private_code, xmlns,xmlns_url) VALUES (1,1,1,'tst','TST','http://www.rutebanken.org/ns/tst');
+insert into code_space (pk, entity_version,lock_version,private_code, xmlns,xmlns_url) VALUES (2,1,1,'nsr', 'NSR', 'http://www.rutebanken.org/ns/nsr');
 
 
 
@@ -19,7 +20,8 @@ insert into entity_classification (pk, entity_version,lock_version,entity_type_p
 insert into entity_classification (pk, entity_version,lock_version,entity_type_pk,code_space_pk,private_code,name) VALUES (2,1,1,1,1,'tramStop','Tram stop');
 insert into entity_classification (pk, entity_version,lock_version,entity_type_pk,code_space_pk,private_code,name) VALUES (3,1,1,2,1,'*','All entity types');
 
-insert into organisation(pk, dtype,entity_version,lock_version,code_space_pk,private_code,name) values (nextval('hibernate_sequence'),'Authority',1,1,1,'OrgTest','Test Org');
+insert into organisation(pk, dtype,entity_version,lock_version,code_space_pk,private_code,name) values (1,'Authority',1,1,1,'OrgTest','Test Org');
+insert into organisation(pk, dtype,entity_version,lock_version,code_space_pk,private_code,name) values (2,'Authority',1,1,2,'testOrg','Test Org');
 
 insert into responsibility_role_assignment (pk,entity_version,lock_version,private_code,code_space_pk,responsible_organisation_pk,type_of_responsibility_role_pk) VALUES (1,1,1,'1',1,1,1);
 insert into responsibility_role_assignment (pk,entity_version,lock_version,private_code,code_space_pk,responsible_organisation_pk,type_of_responsibility_role_pk) VALUES (2,1,1,'2',1,1,2);
