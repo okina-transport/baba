@@ -17,12 +17,12 @@
 package no.rutebanken.baba.organisation.model.organisation;
 
 import com.google.common.base.Joiner;
-import com.vividsolutions.jts.geom.Polygon;
+import org.locationtech.jts.geom.Polygon;
 import no.rutebanken.baba.organisation.model.CodeSpaceEntity;
 import org.hibernate.annotations.CacheConcurrencyStrategy;
 
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 
 @org.hibernate.annotations.Cache(usage = CacheConcurrencyStrategy.READ_WRITE)
 @Entity

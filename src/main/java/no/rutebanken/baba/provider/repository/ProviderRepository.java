@@ -16,7 +16,6 @@
 
 package no.rutebanken.baba.provider.repository;
 
-import no.rutebanken.baba.provider.domain.ChouetteInfo;
 import no.rutebanken.baba.provider.domain.Provider;
 
 import java.util.Collection;

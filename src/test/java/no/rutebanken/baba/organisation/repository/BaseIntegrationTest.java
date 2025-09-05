@@ -16,25 +16,22 @@
 
 package no.rutebanken.baba.organisation.repository;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import no.rutebanken.baba.BabaTestApp;
 import no.rutebanken.baba.organisation.model.CodeSpace;
 import no.rutebanken.baba.organisation.model.organisation.Authority;
 import no.rutebanken.baba.organisation.model.organisation.Organisation;
-import org.junit.Before;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.util.CollectionUtils;
 
-import java.io.IOException;
-import java.io.StringWriter;
+import java.util.List;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT,classes = BabaTestApp.class)
-@Transactional
+@ExtendWith(SpringExtension.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT, classes = BabaTestApp.class)
 public abstract class BaseIntegrationTest {
 
 	@Autowired
@@ -43,21 +40,34 @@ public abstract class BaseIntegrationTest {
 	@Autowired
 	protected OrganisationRepository organisationRepository;
 
+    @Autowired
+    protected TestRestTemplate restTemplate;
 
 	protected Organisation defaultOrganisation;
 
 	protected CodeSpace defaultCodeSpace;
 
-	@Before
+	@BeforeEach
 	public void setUp() {
-		CodeSpace codeSpace = new CodeSpace("nsr", "NSR", "http://www.rutebanken.org/ns/nsr");
-		defaultCodeSpace = codeSpaceRepository.saveAndFlush(codeSpace);
+        CodeSpace codeSpaceNsr = codeSpaceRepository.getOneByPublicId("nsr");
+        if (codeSpaceNsr == null) {
+            CodeSpace codeSpace = new CodeSpace("nsr", "NSR", "http://www.rutebanken.org/ns/nsr");
+            defaultCodeSpace = codeSpaceRepository.saveAndFlush(codeSpace);
+        } else {
+            defaultCodeSpace = codeSpaceNsr;
+        }
 
-		Authority authority = new Authority();
-		authority.setCodeSpace(defaultCodeSpace);
-		authority.setName("Test Org");
-		authority.setPrivateCode("testOrg");
-		defaultOrganisation = organisationRepository.saveAndFlush(authority);
+        List<Organisation> matchingOrg = organisationRepository.findByName("Test Org");
+        if (CollectionUtils.isEmpty(matchingOrg)) {
+            Authority authority = new Authority();
+            authority.setCodeSpace(defaultCodeSpace);
+            authority.setName("Test Org");
+            authority.setPrivateCode("testOrg");
+            defaultOrganisation = organisationRepository.saveAndFlush(authority);
+        } else {
+            defaultOrganisation = matchingOrg.getFirst();
+        }
+
 	}
 
 }

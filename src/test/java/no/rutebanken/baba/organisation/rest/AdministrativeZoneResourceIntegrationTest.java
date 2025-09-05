@@ -19,10 +19,7 @@ package no.rutebanken.baba.organisation.rest;
 
 import no.rutebanken.baba.organisation.repository.BaseIntegrationTest;
 import no.rutebanken.baba.organisation.rest.dto.organisation.AdministrativeZoneDTO;
-import org.junit.Assert;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -31,25 +28,21 @@ import java.util.Arrays;
 
 import static no.rutebanken.baba.organisation.rest.ResourceTestUtils.createAdministrativeZone;
 import static no.rutebanken.baba.organisation.rest.ResourceTestUtils.validPolygon;
+import static org.assertj.core.api.Assertions.assertThat;
 
-
-public class AdministrativeZoneResourceIntegrationTest extends BaseIntegrationTest {
-
-
-    @Autowired
-    private TestRestTemplate restTemplate;
+class AdministrativeZoneResourceIntegrationTest extends BaseIntegrationTest {
 
     private static final String PATH = "/services/organisations/administrative_zones";
 
     @Test
-    public void administrativeZoneNotFound() throws Exception {
+    void administrativeZoneNotFound()  {
         ResponseEntity<AdministrativeZoneDTO> entity = restTemplate.getForEntity(PATH + "/unknownAdministrativeZones",
                 AdministrativeZoneDTO.class);
-        Assert.assertEquals(HttpStatus.NOT_FOUND, entity.getStatusCode());
+        assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test
-    public void crudAdministrativeZone() throws Exception {
+    void crudAdministrativeZone() {
         AdministrativeZoneDTO createAdministrativeZone = createAdministrativeZone("administrativeZone name", "privateCode", validPolygon());
         URI uri = restTemplate.postForLocation(PATH, createAdministrativeZone);
         assertAdministrativeZone(createAdministrativeZone, uri);
@@ -67,31 +60,33 @@ public class AdministrativeZoneResourceIntegrationTest extends BaseIntegrationTe
 
         ResponseEntity<AdministrativeZoneDTO> entity = restTemplate.getForEntity(uri,
                 AdministrativeZoneDTO.class);
-        Assert.assertEquals(HttpStatus.NOT_FOUND, entity.getStatusCode());
+
+        assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 
     }
 
     private void assertAdministrativeZoneInArray(AdministrativeZoneDTO administrativeZone, AdministrativeZoneDTO[] array) {
-        Assert.assertNotNull(array);
-        Assert.assertTrue(Arrays.stream(array).anyMatch(r -> r.privateCode.equals(administrativeZone.privateCode)));
+        assertThat(array).isNotNull();
+        assertThat(Arrays.stream(array).anyMatch(r -> r.privateCode.equals(administrativeZone.privateCode))).isTrue();
     }
 
 
     protected void assertAdministrativeZone(AdministrativeZoneDTO inAdministrativeZone, URI uri) {
-        Assert.assertNotNull(uri);
+        assertThat(uri).isNotNull();
         ResponseEntity<AdministrativeZoneDTO> rsp = restTemplate.getForEntity(uri, AdministrativeZoneDTO.class);
         AdministrativeZoneDTO outAdministrativeZone = rsp.getBody();
-        Assert.assertEquals(inAdministrativeZone.name, outAdministrativeZone.name);
-        Assert.assertEquals(inAdministrativeZone.privateCode, outAdministrativeZone.privateCode);
-        Assert.assertEquals(inAdministrativeZone.type, outAdministrativeZone.type);
-        Assert.assertEquals(inAdministrativeZone.source, outAdministrativeZone.source);
+        assertThat(outAdministrativeZone).isNotNull();
+        assertThat(inAdministrativeZone.name).isEqualTo(outAdministrativeZone.name);
+        assertThat(inAdministrativeZone.privateCode).isEqualTo(outAdministrativeZone.privateCode);
+        assertThat(inAdministrativeZone.type).isEqualTo(outAdministrativeZone.type);
+        assertThat(inAdministrativeZone.source).isEqualTo(outAdministrativeZone.source);
     }
 
     @Test
-    public void createInvalidAdministrativeZone() throws Exception {
+    void createInvalidAdministrativeZone() {
         AdministrativeZoneDTO inAdministrativeZone = createAdministrativeZone("administrativeZone name", "privateCode", null);
         ResponseEntity<String> rsp = restTemplate.postForEntity(PATH, inAdministrativeZone, String.class);
 
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, rsp.getStatusCode());
+        assertThat(rsp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 }

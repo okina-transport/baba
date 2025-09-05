@@ -17,7 +17,6 @@
 package no.rutebanken.baba.organisation.rest;
 
 import com.google.common.collect.Sets;
-
 import no.rutebanken.baba.organisation.TestConstantsOrganisation;
 import no.rutebanken.baba.organisation.model.user.NotificationType;
 import no.rutebanken.baba.organisation.model.user.eventfilter.JobState;
@@ -26,40 +25,38 @@ import no.rutebanken.baba.organisation.rest.dto.user.ContactDetailsDTO;
 import no.rutebanken.baba.organisation.rest.dto.user.EventFilterDTO;
 import no.rutebanken.baba.organisation.rest.dto.user.NotificationConfigDTO;
 import no.rutebanken.baba.organisation.rest.dto.user.UserDTO;
-import org.junit.Assert;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
 
 import java.net.URI;
 import java.util.Arrays;
+import java.util.List;
 import java.util.Set;
 
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class UserResourceIntegrationTest extends BaseIntegrationTest {
-    @Autowired
-    private TestRestTemplate restTemplate;
+
+class UserResourceIntegrationTest extends BaseIntegrationTest {
 
     private static final String PATH = "/services/organisations/users";
 
-
     @Test
-    public void userNotFound() throws Exception {
+    void userNotFound() {
         ResponseEntity<UserDTO> entity = restTemplate.getForEntity(PATH + "/unknownUser",
                 UserDTO.class);
-        Assert.assertEquals(HttpStatus.NOT_FOUND, entity.getStatusCode());
+        assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
 
     @Test
-    public void crudUser() throws Exception {
+    void crudUser() {
         ContactDetailsDTO createContactDetails = new ContactDetailsDTO("first", "last", "phone", "email@email.com");
         UserDTO createUser = createUser("userName", TestConstantsOrganisation.ORGANISATION_ID, createContactDetails);
         ResponseEntity<String> createResponse = restTemplate.postForEntity(PATH, createUser, String.class);
-        Assert.assertNotNull(createResponse.getBody());
+        assertThat(createResponse).isNotNull();
+        assertThat(createResponse.getBody()).isNotNull();
         URI uri = createResponse.getHeaders().getLocation();
         assertUser(createUser, uri);
 
@@ -75,22 +72,22 @@ public class UserResourceIntegrationTest extends BaseIntegrationTest {
         UserDTO[] allUsersWithFullDetails =
                 restTemplate.getForObject(PATH + "?full=true", UserDTO[].class);
         assertUserInArray(updateUser, allUsersWithFullDetails);
-        Assert.assertNotNull(allUsersWithFullDetails[0].organisation.name);
+        assertThat(allUsersWithFullDetails[0].organisation.name).isNotNull();
 
-
+        assertThat(uri).isNotNull();
         ResponseEntity<String> resetPasswordResponse = restTemplate.postForEntity(uri.getPath() + "/resetPassword", createUser, String.class);
-        Assert.assertNotNull(resetPasswordResponse.getBody());
-        Assert.assertNotEquals(resetPasswordResponse.getBody(), createResponse.getBody());
+        assertThat(resetPasswordResponse.getBody()).isNotNull();
+        assertThat(resetPasswordResponse.getBody()).isNotEqualTo(createResponse.getBody());
 
         restTemplate.delete(uri);
 
         ResponseEntity<UserDTO> entity = restTemplate.getForEntity(uri,
                 UserDTO.class);
-        Assert.assertEquals(HttpStatus.NOT_FOUND, entity.getStatusCode());
+        assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
     }
 
     @Test
-    public void updateUserWithNotificationConfigurations() {
+    void updateUserWithNotificationConfigurations() {
         ContactDetailsDTO createContactDetails = new ContactDetailsDTO("first", "last", "phone", "email@email.com");
         UserDTO user = createUser("userWithNotificationConfig", TestConstantsOrganisation.ORGANISATION_ID, createContactDetails);
         URI uri = restTemplate.postForLocation(PATH, user);
@@ -105,13 +102,13 @@ public class UserResourceIntegrationTest extends BaseIntegrationTest {
     }
 
     @Test
-    public void updateUsersResponsibilitySets() throws Exception {
+    void updateUsersResponsibilitySets() {
         ContactDetailsDTO contactDetails = new ContactDetailsDTO("first", "last", "phone", "email@email.com");
         UserDTO user = createUser("userName", TestConstantsOrganisation.ORGANISATION_ID, contactDetails);
         URI uri = restTemplate.postForLocation(PATH, user);
         assertUser(user, uri);
 
-        user.responsibilitySetRefs = Arrays.asList(TestConstantsOrganisation.RESPONSIBILITY_SET_ID);
+        user.responsibilitySetRefs = List.of(TestConstantsOrganisation.RESPONSIBILITY_SET_ID);
         restTemplate.put(uri, user);
         assertUser(user, uri);
 
@@ -119,7 +116,7 @@ public class UserResourceIntegrationTest extends BaseIntegrationTest {
         restTemplate.put(uri, user);
         assertUser(user, uri);
 
-        user.responsibilitySetRefs = Arrays.asList(TestConstantsOrganisation.RESPONSIBILITY_SET_ID_2);
+        user.responsibilitySetRefs = List.of(TestConstantsOrganisation.RESPONSIBILITY_SET_ID_2);
         restTemplate.put(uri, user);
         assertUser(user, uri);
 
@@ -129,8 +126,8 @@ public class UserResourceIntegrationTest extends BaseIntegrationTest {
     }
 
     private void assertUserInArray(UserDTO user, UserDTO[] array) {
-        Assert.assertNotNull(array);
-        Assert.assertTrue(Arrays.stream(array).anyMatch(r -> r.username.equals(user.username.toLowerCase())));
+        assertThat(array).isNotNull();
+        assertThat(Arrays.stream(array).anyMatch(r -> r.username.equals(user.username.toLowerCase()))).isTrue();
     }
 
     protected UserDTO createUser(String username, String orgRef, ContactDetailsDTO contactDetails, String... respSetRefs) {
@@ -147,52 +144,58 @@ public class UserResourceIntegrationTest extends BaseIntegrationTest {
 
 
     protected void assertUser(UserDTO inUser, URI uri) {
-        Assert.assertNotNull(uri);
+        assertThat(uri).isNotNull();
         ResponseEntity<UserDTO> rsp = restTemplate.getForEntity(uri, UserDTO.class);
         UserDTO outUser = rsp.getBody();
 
+        assertThat(outUser).isNotNull();
         assertUserBasics(inUser, outUser);
-        Assert.assertNull(outUser.organisation);
-        Assert.assertNull(outUser.responsibilitySets);
+        assertThat(outUser.organisation).isNull();
+        assertThat(outUser.responsibilitySets).isNull();
 
 
         ResponseEntity<UserDTO> fullRsp = restTemplate.getForEntity(uri.toString() + "?full=true", UserDTO.class);
         UserDTO fullOutUser = fullRsp.getBody();
+        assertThat(fullOutUser).isNotNull();
         assertUserBasics(inUser, fullOutUser);
-        Assert.assertNotNull(fullOutUser.organisation.name);
-        Assert.assertEquals(inUser.responsibilitySetRefs == null ? 0 : inUser.responsibilitySetRefs.size(), fullOutUser.responsibilitySets.size());
-        Assert.assertTrue(fullOutUser.responsibilitySets.stream().allMatch(rs -> rs.name != null));
+        assertThat(fullOutUser.organisation.name).isNotNull();
+        if (CollectionUtils.isEmpty(inUser.responsibilitySetRefs)) {
+            assertThat(fullOutUser.responsibilitySetRefs).isEmpty();
+        } else {
+            assertThat(inUser.responsibilitySetRefs).hasSameSizeAs(fullOutUser.responsibilitySetRefs);
+        }
+        assertThat(fullOutUser.responsibilitySets.stream().allMatch(rs -> rs.name != null)).isTrue();
     }
 
     private void assertUserBasics(UserDTO inUser, UserDTO outUser) {
-
-        Assert.assertEquals(inUser.username.toLowerCase(), outUser.username);
-        Assert.assertEquals(inUser.privateCode, outUser.privateCode);
+        assertThat(inUser.username).isEqualToIgnoringCase(outUser.username);
+        assertThat(inUser.privateCode).isEqualTo(outUser.privateCode);
 
         if (CollectionUtils.isEmpty(inUser.responsibilitySetRefs)) {
-            Assert.assertTrue(CollectionUtils.isEmpty(outUser.responsibilitySetRefs));
+            assertThat(outUser.responsibilitySetRefs).isEmpty();
         } else {
-            Assert.assertEquals(inUser.responsibilitySetRefs.size(), outUser.responsibilitySetRefs.size());
-            Assert.assertTrue(inUser.responsibilitySetRefs.containsAll(outUser.responsibilitySetRefs));
+            assertThat(inUser.responsibilitySetRefs).hasSameSizeAs(outUser.responsibilitySetRefs);
+            assertThat(inUser.responsibilitySetRefs).containsAll(outUser.responsibilitySetRefs);
         }
 
         if (inUser.contactDetails == null) {
-            Assert.assertNull(outUser.contactDetails);
+            assertThat(outUser.contactDetails).isNotNull();
+
         } else {
-            Assert.assertEquals(inUser.contactDetails.firstName, outUser.contactDetails.firstName);
-            Assert.assertEquals(inUser.contactDetails.lastName, outUser.contactDetails.lastName);
-            Assert.assertEquals(inUser.contactDetails.email, outUser.contactDetails.email);
-            Assert.assertEquals(inUser.contactDetails.phone, outUser.contactDetails.phone);
+            assertThat(inUser.contactDetails.firstName).isEqualTo(outUser.contactDetails.firstName);
+            assertThat(inUser.contactDetails.lastName).isEqualTo(outUser.contactDetails.lastName);
+            assertThat(inUser.contactDetails.email).isEqualTo(outUser.contactDetails.email);
+            assertThat(inUser.contactDetails.phone).isEqualTo(outUser.contactDetails.phone);
         }
 
     }
 
     @Test
-    public void createInvalidUser() throws Exception {
+    void createInvalidUser() {
         UserDTO inUser = createUser("user name", "privateCode", null);
         ResponseEntity<String> rsp = restTemplate.postForEntity(PATH, inUser, String.class);
 
-        Assert.assertEquals(HttpStatus.BAD_REQUEST, rsp.getStatusCode());
+        assertThat(rsp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
     }
 
 

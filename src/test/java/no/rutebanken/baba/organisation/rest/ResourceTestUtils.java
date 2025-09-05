@@ -20,7 +20,6 @@ import no.rutebanken.baba.organisation.model.organisation.AdministrativeZoneType
 import no.rutebanken.baba.organisation.rest.dto.TypeDTO;
 import no.rutebanken.baba.organisation.rest.dto.organisation.AdministrativeZoneDTO;
 import no.rutebanken.baba.organisation.rest.dto.user.NotificationConfigDTO;
-import org.junit.Assert;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.ResponseEntity;
 import org.wololo.geojson.Polygon;
@@ -32,13 +31,13 @@ import java.util.List;
 import java.util.Set;
 
 import static no.rutebanken.baba.organisation.TestConstantsOrganisation.CODE_SPACE_ID;
+import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
 
 public class ResourceTestUtils {
 
     public static void setNotificationConfig(TestRestTemplate restTemplate, String userName, Set<NotificationConfigDTO> config) {
         restTemplate.put("/services/organisations/users/" + userName + "/notification_configurations", config, String.class);
     }
-
 
     public static List<String> addAdminZones(TestRestTemplate restTemplate, String... privateCodes) {
         List<String> ids = new ArrayList<>();
@@ -56,11 +55,12 @@ public class ResourceTestUtils {
     }
 
     public static void assertType(TypeDTO in, URI uri, TestRestTemplate restTemplate) {
-        Assert.assertNotNull(uri);
+        assertThat(uri).isNotNull();
         ResponseEntity<TypeDTO> rsp = restTemplate.getForEntity(uri, TypeDTO.class);
         TypeDTO out = rsp.getBody();
-        Assert.assertEquals(in.name, out.name);
-        Assert.assertEquals(in.privateCode, out.privateCode);
+        assertThat(out).isNotNull();
+        assertThat(in.name).isEqualTo(out.name);
+        assertThat(in.privateCode).isEqualTo(out.privateCode);
     }
 
     public static AdministrativeZoneDTO createAdministrativeZone(String name, String privateCode, Polygon polygon) {

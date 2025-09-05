@@ -16,8 +16,9 @@
 
 package no.rutebanken.baba.provider.rest;
 
-import io.swagger.annotations.Api;
-
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.tags.Tags;
+import jakarta.ws.rs.*;
 import no.rutebanken.baba.provider.domain.Provider;
 import no.rutebanken.baba.provider.domain.TransportMode;
 import no.rutebanken.baba.provider.repository.ProviderRepository;
@@ -27,7 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Component;
 
-import javax.ws.rs.*;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
@@ -39,7 +39,9 @@ import static org.rutebanken.helper.organisation.AuthorizationConstants.ROLE_ROU
 @Component
 @Produces("application/json")
 @Path("")
-@Api
+@Tags(value = {
+        @Tag(name = "Provider Resource", description = "Provider resource")
+})
 public class ProviderResource {
 
     private final Logger logger = LoggerFactory.getLogger(this.getClass());

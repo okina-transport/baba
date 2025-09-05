@@ -18,7 +18,7 @@ package no.rutebanken.baba.config;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.jboss.resteasy.client.jaxrs.ResteasyClientBuilder;
+import org.jboss.resteasy.client.jaxrs.internal.ResteasyClientBuilderImpl;
 import org.jboss.resteasy.plugins.providers.jackson.ResteasyJackson2Provider;
 import org.keycloak.admin.client.KeycloakBuilder;
 import org.keycloak.admin.client.resource.RealmResource;
@@ -62,7 +62,7 @@ public class KeyCloakClientConfiguration {
                 .clientId(clientId)
                 .clientSecret(clientSecret)
                 .grantType("client_credentials")
-                .resteasyClient(new ResteasyClientBuilder()
+                .resteasyClient(new ResteasyClientBuilderImpl()
                         .connectionPoolSize(10)
                         .register(jackson2Provider)
                         .build())

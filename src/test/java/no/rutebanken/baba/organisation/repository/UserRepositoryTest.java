@@ -22,15 +22,16 @@ import no.rutebanken.baba.organisation.model.responsibility.ResponsibilitySet;
 import no.rutebanken.baba.organisation.model.responsibility.Role;
 import no.rutebanken.baba.organisation.model.user.ContactDetails;
 import no.rutebanken.baba.organisation.model.user.User;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import javax.persistence.EntityManager;
 import java.util.List;
 
+import static org.assertj.core.api.Java6Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
-public class UserRepositoryTest extends BaseIntegrationTest {
+
+class UserRepositoryTest extends BaseIntegrationTest {
 
     @Autowired
     private UserRepository userRepository;
@@ -41,17 +42,15 @@ public class UserRepositoryTest extends BaseIntegrationTest {
     @Autowired
     private ResponsibilitySetRepository responsibilitySetRepository;
 
-    @Autowired
-    private EntityManager em;
 
     @Test
-    public void testInsertUser() {
+    void testInsertUser() {
 
         User user = User.builder().withUsername("raffen").withPrivateCode("2").withOrganisation(defaultOrganisation).withContactDetails(minimalContactDetails()).build();
         User createdUser = userRepository.saveAndFlush(user);
 
-        User fetchedUser = userRepository.getOne(createdUser.getPk());
-        Assert.assertTrue(fetchedUser.getId().equals("User:2"));
+        User fetchedUser = userRepository.findById(createdUser.getPk()).orElse(new User());
+        assertEquals("User:2", fetchedUser.getId());
 
 
     }
@@ -64,7 +63,7 @@ public class UserRepositoryTest extends BaseIntegrationTest {
 
 
     @Test
-    public void testFindByResponsibilitySet() {
+    void testFindByResponsibilitySet() {
         Role role = roleRepository.save(new Role("testCode", "testRole"));
         ResponsibilityRoleAssignment responsibilityRoleAssignment =
                 ResponsibilityRoleAssignment.builder().withPrivateCode("pCode").withResponsibleOrganisation(defaultOrganisation)
@@ -83,13 +82,11 @@ public class UserRepositoryTest extends BaseIntegrationTest {
         User userWithoutRespSet = userRepository.saveAndFlush(User.builder().withUsername("userWithoutRespSet").withPrivateCode("userWithoutRespSet").withOrganisation(defaultOrganisation).withContactDetails(minimalContactDetails()).build());
         List<User> usersWithRespSet = userRepository.findUsersWithResponsibilitySet(responsibilitySet);
 
-        Assert.assertEquals(1, usersWithRespSet.size());
-        Assert.assertTrue(usersWithRespSet.contains(userWithRespSet));
-        Assert.assertFalse(usersWithRespSet.contains(userWithoutRespSet));
+        assertThat(usersWithRespSet).isNotEmpty().hasSize(1);
+        assertThat(usersWithRespSet).extracting("id").containsExactly(userWithRespSet.getId());
+        assertThat(usersWithRespSet).extracting("id").doesNotContain(userWithoutRespSet.getId());
 
-        userRepository.delete(usersWithRespSet);
-
-        em.flush();
+        userRepository.deleteAll(usersWithRespSet);
     }
 
 }

@@ -16,7 +16,9 @@
 
 package no.rutebanken.baba.organisation.rest.mapper;
 
+import jakarta.ws.rs.BadRequestException;
 import no.rutebanken.baba.organisation.model.CodeSpace;
+import no.rutebanken.baba.organisation.model.CodeSpaceEntity;
 import no.rutebanken.baba.organisation.model.organisation.Authority;
 import no.rutebanken.baba.organisation.model.organisation.Organisation;
 import no.rutebanken.baba.organisation.model.organisation.OrganisationPart;
@@ -28,8 +30,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.CollectionUtils;
 
-import javax.ws.rs.BadRequestException;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
@@ -56,7 +58,7 @@ public class OrganisationMapper implements DTOMapper<Organisation, OrganisationD
 		}
 
 		if (!CollectionUtils.isEmpty(entity.getParts())) {
-			dto.parts = entity.getParts().stream().map(p -> toDTO(p)).collect(Collectors.toList());
+			dto.parts = entity.getParts().stream().map(this::toDTO).collect(Collectors.toList());
 		}
 
 		return dto;
@@ -106,7 +108,7 @@ public class OrganisationMapper implements DTOMapper<Organisation, OrganisationD
 		dto.name = part.getName();
 		dto.id = part.getId();
 		if (!CollectionUtils.isEmpty(part.getAdministrativeZones())) {
-			dto.administrativeZoneRefs = part.getAdministrativeZones().stream().map(az -> az.getId()).collect(Collectors.toList());
+			dto.administrativeZoneRefs = part.getAdministrativeZones().stream().map(CodeSpaceEntity::getId).collect(Collectors.toList());
 		}
 
 		return dto;
@@ -132,10 +134,9 @@ public class OrganisationMapper implements DTOMapper<Organisation, OrganisationD
 	}
 
 	private Organisation createByType(OrganisationDTO.OrganisationType type) {
-		switch (type) {
-			case AUTHORITY:
-				return new Authority();
-		}
+        if (Objects.requireNonNull(type) == OrganisationDTO.OrganisationType.AUTHORITY) {
+            return new Authority();
+        }
 		throw new BadRequestException("Unknown organisation type:" + type);
 	}
 }

@@ -20,10 +20,7 @@ import no.rutebanken.baba.organisation.TestConstantsOrganisation;
 import no.rutebanken.baba.organisation.repository.BaseIntegrationTest;
 import no.rutebanken.baba.organisation.rest.dto.TypeDTO;
 import no.rutebanken.baba.organisation.rest.dto.responsibility.EntityTypeDTO;
-import org.junit.Assert;
-import org.junit.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.junit.jupiter.api.Test;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.CollectionUtils;
@@ -32,23 +29,22 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+import static org.assertj.core.api.Assertions.assertThat;
 
-public class EntityTypeResourceIntegrationTest extends BaseIntegrationTest {
 
-	@Autowired
-	private TestRestTemplate restTemplate;
+class EntityTypeResourceIntegrationTest extends BaseIntegrationTest {
 
 	private static final String PATH = "/services/organisations/entity_types";
 
 	@Test
-	public void entityTypeNotFound() throws Exception {
+	void entityTypeNotFound() {
 		ResponseEntity<EntityTypeDTO> entity = restTemplate.getForEntity(PATH + "/unknownEntityTypes",
 				EntityTypeDTO.class);
-		Assert.assertEquals(HttpStatus.NOT_FOUND, entity.getStatusCode());
+        assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 	}
 
 	@Test
-	public void crudEntityType() throws Exception {
+	void crudEntityType() {
 		EntityTypeDTO createEntityType = createEntityType("entityType name", "privateCode");
 		URI uri = restTemplate.postForLocation(PATH, createEntityType);
 		assertEntityType(createEntityType, uri);
@@ -70,20 +66,19 @@ public class EntityTypeResourceIntegrationTest extends BaseIntegrationTest {
 
 		ResponseEntity<EntityTypeDTO> entity = restTemplate.getForEntity(uri,
 				EntityTypeDTO.class);
-		Assert.assertEquals(HttpStatus.NOT_FOUND, entity.getStatusCode());
-
+        assertThat(entity.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
 	}
 
 
 	@Test
-	public void updateEntityClassifications() throws Exception {
+	void updateEntityClassifications() {
 		TypeDTO classification1 = createClassification("c1", "n1");
 		TypeDTO classification2 = createClassification("c2", "n2");
 		EntityTypeDTO entityType = createEntityType("RspSetUpdate", "RspSet name", classification1, classification2);
 		URI uri = restTemplate.postForLocation(PATH, entityType);
 		EntityTypeDTO createdType = assertEntityType(entityType, uri);
 
-		createdType.classifications.get(0).name = "newName";
+		createdType.classifications.getFirst().name = "newName";
 		createdType.classifications.remove(1);
 
 		TypeDTO classification3 = createClassification("c3", "n3");
@@ -100,25 +95,26 @@ public class EntityTypeResourceIntegrationTest extends BaseIntegrationTest {
 
 
 	public EntityTypeDTO assertEntityType(EntityTypeDTO in, URI uri) {
-		Assert.assertNotNull(uri);
+        assertThat(uri).isNotNull();
 		ResponseEntity<EntityTypeDTO> rsp = restTemplate.getForEntity(uri, EntityTypeDTO.class);
 		EntityTypeDTO out = rsp.getBody();
-		Assert.assertEquals(in.name, out.name);
-		Assert.assertEquals(in.privateCode, out.privateCode);
+        assertThat(out).isNotNull();
+        assertThat(in.name).isEqualTo(out.name);
+        assertThat(in.privateCode).isEqualTo(out.privateCode);
 		if (CollectionUtils.isEmpty(in.classifications)) {
-			Assert.assertTrue(CollectionUtils.isEmpty(in.classifications));
+            assertThat(in.classifications).isEmpty();
 		} else {
-			Assert.assertEquals(in.classifications.size(), in.classifications.size());
+            assertThat(in.classifications).hasSameSizeAs(out.classifications);
 			for (TypeDTO inClassification : in.classifications) {
-				Assert.assertTrue(out.classifications.stream().anyMatch(outClassification -> outClassification.privateCode.equals(inClassification.privateCode)));
+				assertThat(out.classifications.stream().anyMatch(outClassification -> outClassification.privateCode.equals(inClassification.privateCode))).isTrue();
 			}
 		}
 		return out;
 	}
 
 	private void assertEntityTypeInArray(EntityTypeDTO entityType, EntityTypeDTO[] array) {
-		Assert.assertNotNull(array);
-		Assert.assertTrue(Arrays.stream(array).anyMatch(r -> r.privateCode.equals(entityType.privateCode)));
+        assertThat(array).isNotNull();
+        assertThat(Arrays.stream(array).anyMatch(r -> r.privateCode.equals(entityType.privateCode))).isTrue();
 	}
 
 	protected EntityTypeDTO createEntityType(String name, String privateCode, TypeDTO... classifications) {
@@ -142,11 +138,11 @@ public class EntityTypeResourceIntegrationTest extends BaseIntegrationTest {
 
 
 	@Test
-	public void createInvalidEntityType() throws Exception {
+	void createInvalidEntityType() {
 		EntityTypeDTO inEntityType = createEntityType("entityType name", null);
 		ResponseEntity<String> rsp = restTemplate.postForEntity(PATH, inEntityType, String.class);
 
-		Assert.assertEquals(HttpStatus.BAD_REQUEST, rsp.getStatusCode());
+        assertThat(rsp.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
 	}
 
 }

@@ -1,0 +1,1 @@
+ALTER TABLE "public".provider RENAME COLUMN mosaic_id to mobiiti_id;
